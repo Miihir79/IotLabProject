@@ -1,3 +1,4 @@
+import smtplib
 import threading
 import socket
 
@@ -11,6 +12,7 @@ lowerLimits = [1, ]
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((host, port))
 server.listen()
+email = "mihirrshah02@gmail.com"
 
 
 def broadCastMessage(message):
@@ -22,12 +24,9 @@ def handleClient(client):
     while True:  # endless loop
         try:
             value = client.recv(1024).decode('ascii')  # packet size
-            if 1 < value < 5:
-                client.send("Permissible level for drinking water")
-            elif value > upperLimits[0]:
-                client.send("Over the Permissible levels!!")
-            else:
-                client.send("Under the Permissible levels!!")
+            print(value)
+            if value == "Over the Permissible levels!!":
+                send_alert()
 
         except:
             index = clientsList.index(client)
@@ -52,9 +51,27 @@ def recieveMessage():
         print(f'Identity Name of client is {identityName}')
         broadCastMessage(f'{identityName} joined the channel!'.encode('ascii'))  # for all the clients
         client.send('Connected to the server'.encode('ascii'))  # for the particular client
-
         thread = threading.Thread(target=handleClient, args=(client,))
         thread.start()
+
+
+def send_alert():
+    serverMail = smtplib.SMTP('smtp.gmail.com', 587)
+    serverMail.ehlo()
+    serverMail.starttls()
+    serverMail.ehlo()
+    serverMail.login('mihirrshah02@gmail.com', 'ygjcrdbiahryuylb')
+
+    subject_mail = 'Issue in water'
+
+    body_mail = f'hey there water level has dropped to\n'
+    msg = f"Subject: {subject_mail}\n\n{body_mail}"
+
+    serverMail.sendmail('mihirrshah02@gmail.com', email, msg)
+
+    print('Hey the email has been sent')
+
+    serverMail.quit()
 
 
 recieveMessage()
