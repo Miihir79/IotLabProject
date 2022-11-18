@@ -6,8 +6,6 @@ host = "127.0.0.1"  # local host
 port = 12129
 clientsList = []
 IdentityName = []
-upperLimits = [5, ]
-lowerLimits = [1, ]
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((host, port))
@@ -25,8 +23,12 @@ def handleClient(client):
         try:
             value = client.recv(1024).decode('ascii')  # packet size
             print(value)
-            if value == "Over the Permissible levels!!":
-                send_alert()
+            if value == "Over the Permissible ph levels!!":
+                send_alert("ph")
+            elif value == "TDS levels Not in the permissible range!":
+                send_alert("tds")
+            elif value == "Chlorine levels not in permissible range":
+                send_alert("chlorine")
 
         except:
             index = clientsList.index(client)
@@ -49,13 +51,13 @@ def recieveMessage():
         clientsList.append(client)
 
         print(f'Identity Name of client is {identityName}')
-        broadCastMessage(f'{identityName} joined the channel!'.encode('ascii'))  # for all the clients
+        broadCastMessage(f'{identityName} joined the system!'.encode('ascii'))  # for all the clients
         client.send('Connected to the server'.encode('ascii'))  # for the particular client
         thread = threading.Thread(target=handleClient, args=(client,))
         thread.start()
 
 
-def send_alert():
+def send_alert(whatsWrong):
     serverMail = smtplib.SMTP('smtp.gmail.com', 587)
     serverMail.ehlo()
     serverMail.starttls()
@@ -64,12 +66,12 @@ def send_alert():
 
     subject_mail = 'Issue in water'
 
-    body_mail = f'hey there water level has dropped to\n'
+    body_mail = f'Hey there, your water system reported abnormal levels of {whatsWrong} \n'
     msg = f"Subject: {subject_mail}\n\n{body_mail}"
 
     serverMail.sendmail('mihirrshah02@gmail.com', email, msg)
 
-    print('Hey the email has been sent')
+    print('The user has been alerted')
 
     serverMail.quit()
 
