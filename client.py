@@ -16,12 +16,12 @@ mail = input("Enter mail for alert")
 def recieveMessage():
     while True:  # infinite loop
         try:
-            message = client.recv(1024).decode('ascii')
+            message = client.recv(1024).decode('utf-8')
             if message == "RequestIdName":
-                client.send(idName.encode('ascii'))
+                client.send(idName.encode('utf-8'))
 
             elif message == "RequestMail":
-                client.send(mail.encode('ascii'))
+                client.send(mail.encode('utf-8'))
             else:
                 print(message)
 
@@ -39,21 +39,21 @@ def sendMessage():
         valueChlorine = random.gauss(mean[2], deviation[2])
 
         if 6.5 < valuePh < 8.5:
-            client.send(f'Permissible ph level for drinking water {valuePh}'.encode("ascii"))
+            client.send(f'Permissible ph level for drinking water {valuePh}'.encode("utf-8"))
         elif valuePh > 8.5:
-            client.send(f'Over the Permissible ph levels!!'.encode("ascii"))
+            client.send(f'Over the Permissible ph levels!!'.encode("utf-8"))
         else:
-            client.send(f'Under the Permissible ph levels!!{valuePh}'.encode("ascii"))
+            client.send(f'Under the Permissible ph levels!!{valuePh}'.encode("utf-8"))
 
         if 100 < valueTurbidity < 1000:
-            client.send(f'Permissible TDS Level for drinking water {valueTurbidity}'.encode("ascii"))
+            client.send(f'Permissible TDS Level for drinking water {valueTurbidity}'.encode("utf-8"))
         else:
-            client.send(f'TDS levels Not in the permissible range! '.encode("ascii"))
+            client.send(f'TDS levels Not in the permissible range! '.encode("utf-8"))
 
         if valueChlorine < 4:
-            client.send(f'Chlorine levels in range {valuePh}'.encode("ascii"))
+            client.send(f'Chlorine levels in range {valuePh}'.encode("utf-8"))
         else:
-            client.send(f'Chlorine levels not in permissible range'.encode("ascii"))
+            client.send(f'Chlorine levels not in permissible range'.encode("utf-8"))
 
         time.sleep(10)
 

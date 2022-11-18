@@ -21,7 +21,7 @@ def broadCastMessage(message):
 def handleClient(client):
     while True:  # endless loop
         try:
-            value = client.recv(1024).decode('ascii')  # packet size
+            value = client.recv(1024).decode('utf-8')  # packet size
             print(value)
             if value == "Over the Permissible ph levels!!":
                 send_alert("ph")
@@ -35,7 +35,7 @@ def handleClient(client):
             clientsList.remove(client)
             client.close()
             identity = IdentityName[index]
-            broadCastMessage(f'{identity} left the chat'.encode('ascii'))
+            broadCastMessage(f'{identity} left the chat'.encode('utf-8'))
             IdentityName.remove(identity)
             break
 
@@ -45,14 +45,14 @@ def recieveMessage():
         client, address = server.accept()
         print(f"Connected with {str(address)}")
 
-        client.send("RequestIdName".encode('ascii'))  # message for client to give a name
-        identityName = client.recv(1024).decode('ascii')
+        client.send("RequestIdName".encode('utf-8'))  # message for client to give a name
+        identityName = client.recv(1024).decode('utf-8')
         IdentityName.append(identityName)
         clientsList.append(client)
 
         print(f'Identity Name of client is {identityName}')
-        broadCastMessage(f'{identityName} joined the system!'.encode('ascii'))  # for all the clients
-        client.send('Connected to the server'.encode('ascii'))  # for the particular client
+        broadCastMessage(f'{identityName} joined the system!'.encode('utf-8'))  # for all the clients
+        client.send('Connected to the server'.encode('utf-8'))  # for the particular client
         thread = threading.Thread(target=handleClient, args=(client,))
         thread.start()
 
