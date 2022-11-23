@@ -6,13 +6,14 @@ import time
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(('127.0.0.1', 12129))
 
+# Intiation for simulated data 
 mean = [2, 500, 3]      # ph, tds, chlorine levels
 deviation = [1, 550, 2]
 
 idName = input("Choose a name: ")
 mail = input("Enter mail for alert")
 
-
+# This method continuously listens to the incoming messages
 def recieveMessage():
     while True:  # infinite loop
         try:
