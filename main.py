@@ -13,27 +13,17 @@ server.listen()
 email = "mihirrshah02@gmail.com"
 
 
-# def broadCastMessage(message):
-#     for client in clientsList:
-#         client.send(message)
-
-
 def handleClient(client):
     while True:  # endless loop
         try:
-            whatsWrong = ""
             value = client.recv(1024).decode('utf-8')  # packet size
             print(value)
             if value == "Over the Permissible ph levels!!":
-                whatsWrong += "pH"
+                send_alert("pH")
             elif value == "TDS levels Not in the permissible range!":
-                whatsWrong += " TDS"
+                send_alert("TDS")
             elif value == "Chlorine levels not in permissible range":
-                whatsWrong += " Chlorine"
-            
-            if len(whatsWrong) != 0:
-                send_alert(whatsWrong)
-                whatsWrong = ""
+                send_alert("Chlorine")
 
         except:
             index = clientsList.index(client)
@@ -56,7 +46,6 @@ def recieveMessage():
         clientsList.append(client)
 
         print(f'Identity Name of client is {identityName}')
-        # broadCastMessage(f'{identityName} joined the system!'.encode('utf-8'))  # for all the clients
         client.send('Connected to the server'.encode('utf-8'))  # for the particular client
         thread = threading.Thread(target=handleClient, args=(client,))
         thread.start()

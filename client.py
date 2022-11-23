@@ -49,10 +49,10 @@ def sendMessage():
         if 100 < valueTurbidity < 1000:
             client.send(f'Permissible TDS Level for drinking water {valueTurbidity}'.encode("utf-8"))
         else:
-            client.send(f'TDS levels Not in the permissible range! '.encode("utf-8"))
+            client.send(f'TDS levels Not in the permissible range!'.encode("utf-8"))
 
         if valueChlorine < 4:
-            client.send(f'Chlorine levels in range {valuePh}'.encode("utf-8"))
+            client.send(f'Chlorine levels in range {valueChlorine}'.encode("utf-8"))
         else:
             client.send(f'Chlorine levels not in permissible range'.encode("utf-8"))
 
